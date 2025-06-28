@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tcc-frontend-service
+  labels:
+    app: tcc-frontend
+spec:
+  type: LoadBalancer # Exposes the service externally using a cloud provider's load balancer
+  selector:
+    app: tcc-frontend
+  ports:
+    - protocol: TCP
+      port: 80 # Service port
+      targetPort: 4000

@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tcc-frontend
+  labels:
+    app: tcc-frontend
+spec:
+  replicas: 1 # You can adjust the number of replicas for high availability
+  selector:
+    matchLabels:
+      app: tcc-frontend
+  template:
+    metadata:
+      labels:
+        app: tcc-frontend
+    spec:
+      containers:
+        - name: tcc-frontend
+          image: us-central1-docker.pkg.dev/key-hope-455618-p3/tcc-erp-repo/frontend:latest
+          ports:
+            - containerPort: 4000 # Nginx listens on port 80
+          env:
+            # These environment variables would be used if you configure your Angular app
+            # to read them, for example, using a custom webpack config or a script
+            # that replaces placeholders in environment.prod.ts.
+            # However, for API communication, directly pointing to K8s service names is better.
+            - name: API_URL
+              value: "http://inventory-service:5000/api/inventory" # Internal K8s service name
+            - name: AUTH_API_URL
+              value: "http://auth-service:5000/api/auth" # Internal K8s service name
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          # Liveness and Readiness Probes (Recomendado para Produção)
+          livenessProbe:
+            httpGet:
+              path: /index.html # Ou /healthz se você tiver um endpoint de saúde
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /index.html
+              port: 80
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2

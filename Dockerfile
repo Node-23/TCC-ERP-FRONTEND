@@ -1,13 +1,10 @@
-FROM node:alpine
+FROM nginx:stable-alpine
 
-WORKDIR /usr/src/app
+# Remove página padrão do nginx
+#RUN rm -rf /usr/share/nginx/html/*
 
-COPY . /usr/src/app
+# Copia arquivos buildados do Angular
+COPY /dist/front-tcc /usr/share/nginx/html
 
-RUN npm install -g @angular/cli
-
-RUN npm install
-
-EXPOSE 4200
-
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+# Copia o nginx.conf customizado
+#COPY nginx.conf /etc/nginx/conf.d/default.conf

@@ -1,42 +1,58 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { SalesComponent } from './pages/sales/sales.component';
-import { ProductsComponent } from './pages/products/products.component';
-import { ClientsComponent } from './pages/clients/clients.component';
-import { EmployeesComponent } from './pages/employees/employees.component';
-import { FinancesComponent } from './pages/finances/finances.component';
-import { HelpComponent } from './pages/help/help.component';
-import { SettingsComponent } from './pages/settings/settings.component';
-import { HomeComponent } from './pages/home/home.component';
-import { LoginComponent } from './pages/login/login.component';
-import { SigninComponent } from './pages/signin/signin.component';
 import { AuthGuard } from './auth.guard'; // Importando o AuthGuard
 
 export const routes: Routes = [
+  { path: '', loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent) }, // Lazy load da Home
+  { path: 'login', loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent) }, // Lazy load do Login
+  { path: 'signin', loadComponent: () => import('./pages/signin/signin.component').then(m => m.SigninComponent) }, // Lazy load do Signin
 
-  // Home e login fora do MainLayout
-  { path: '', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'signin', component: SigninComponent },
-
-  // Rotas protegidas dentro do MainLayout
   {
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-      { path: 'sales', component: SalesComponent, canActivate: [AuthGuard] },
-      { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
-      { path: 'clients', component: ClientsComponent, canActivate: [AuthGuard] },
-      { path: 'employees', component: EmployeesComponent, canActivate: [AuthGuard] },
-      { path: 'finances', component: FinancesComponent, canActivate: [AuthGuard] },
-      { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
-      { path: 'help', component: HelpComponent, canActivate: [AuthGuard] }
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'sales',
+        loadComponent: () => import('./pages/sales/sales.component').then(m => m.SalesComponent),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'products',
+        loadComponent: () => import('./pages/products/products.component').then(m => m.ProductsComponent),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'clients',
+        loadComponent: () => import('./pages/clients/clients.component').then(m => m.ClientsComponent),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'employees',
+        loadComponent: () => import('./pages/employees/employees.component').then(m => m.EmployeesComponent),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'finances',
+        loadComponent: () => import('./pages/finances/finances.component').then(m => m.FinancesComponent),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'settings',
+        loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'help',
+        loadComponent: () => import('./pages/help/help.component').then(m => m.HelpComponent),
+        canActivate: [AuthGuard]
+      }
     ]
   },
-
-  // Wildcard para páginas não encontradas
   { path: '**', redirectTo: '' }
 ];
 
