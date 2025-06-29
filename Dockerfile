@@ -1,10 +1,15 @@
-FROM nginx:stable-alpine
+FROM node:20-slim
+WORKDIR /app
 
-# Remove página padrão do nginx
-#RUN rm -rf /usr/share/nginx/html/*
+# Copia os resultados do build
+COPY /dist/front-tcc /app/dist/front-tcc
+# Copia o package.json e package-lock.json para instalar dependências de produção do server
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
-# Copia arquivos buildados do Angular
-COPY /dist/front-tcc /usr/share/nginx/html
-
-# Copia o nginx.conf customizado
-#COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Define a porta que o servidor Node.js vai escutar
+ENV PORT=4000
+EXPOSE 4000
+# Comando para iniciar o servidor Node.js SSR
+# O Angular CLI geralmente gera o 'main.js' dentro da pasta 'server'
+CMD ["node", "dist/front-tcc/server/server.mjs"]

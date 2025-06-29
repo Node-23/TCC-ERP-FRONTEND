@@ -22,8 +22,8 @@ import {AuthService} from '../../auth.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  private readonly API_URL = 'http://auth-service/api/auth/login';
-  protected readonly GOOGLE_SSO = "http://localhost:8080/api/auth/google-login"
+  private readonly API_URL = 'http://34.54.133.133/api/auth/login';
+  protected readonly GOOGLE_SSO = "http://34.54.133.133/api/auth/google-login"
 
   constructor(
     private router: Router,

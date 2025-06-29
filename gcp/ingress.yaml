@@ -3,41 +3,15 @@ kind: Ingress
 metadata:
   name: tcc-main-ingress
   annotations:
-    kubernetes.io/ingress.class: "gce" # Use "nginx" se estiver usando Nginx Ingress Controller
-    # Para SSL/HTTPS (substitua pelo nome do seu certificado gerenciado ou configuração existente):
-    # networking.gke.io/managed-certificates: "my-frontend-certificate" # Nome do recurso ManagedCertificate do GKE
-    # kubernetes.io/ingress.global-static-ip-name: "my-static-ip" # Nome do seu IP estático global do GCP
+    kubernetes.io/ingress.class: "gce"
 spec:
-  # tls: # Se usando SSL/HTTPS com ManagedCertificate ou Secrets
-  #   - secretName: your-tls-secret # Nome do secret TLS contendo sua chave e certificado
-  #     hosts:
-  #       - your-frontend-domain.com
   rules:
-    - host: your-frontend-domain.com # Substitua pelo seu domínio real (opcional, pode remover se usar apenas IP)
-      http:
+    - http:
         paths:
-          # Regra para encaminhar todo o tráfego raiz e sub-rotas do frontend
           - path: /*
             pathType: ImplementationSpecific
             backend:
               service:
-                name: tcc-frontend-service # Nome do seu serviço ClusterIP do frontend
+                name: tcc-frontend-service
                 port:
-                  number: 80 # Porta do serviço do frontend
-          # Exemplo de regra para rotear chamadas de API para o backend (se o Angular chamar /api/...)
-          # Se o Angular já aponta para nomes de serviço K8s internos, esta regra não é estritamente necessária
-          # no Ingress para o frontend, mas pode ser útil para consolidar tudo sob um único domínio externo.
-          # - path: /api/inventory/*
-          #   pathType: ImplementationSpecific
-          #   backend:
-          #     service:
-          #       name: inventory-api-service # Nome do serviço K8s do backend de inventário
-          #       port:
-          #         number: 5000
-          # - path: /api/auth/*
-          #   pathType: ImplementationSpecific
-          #   backend:
-          #     service:
-          #       name: auth-api-service # Nome do serviço K8s do backend de autenticação
-          #       port:
-          #         number: 5000
+                  number: 80
