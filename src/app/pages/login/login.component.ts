@@ -22,7 +22,7 @@ import {AuthService} from '../../auth.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  private readonly API_URL = '/api/auth/login';
+  private readonly API_URL = 'http://localhost:8080/api/auth/login';
   protected readonly GOOGLE_SSO = "http://localhost:8080/oauth2/authorization/google"
 
   constructor(

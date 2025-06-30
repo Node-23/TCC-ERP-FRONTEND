@@ -31,7 +31,7 @@ export class ClientsComponent implements OnInit {
   ) {}
 
   clients: any[] = [];
-  private readonly urlAPICustomers = '/api/customers/';
+  private readonly urlAPICustomers = 'http://localhost:8080/api/customers/';
 
   @ViewChild('clientModal') clientModal!: AddClientComponent;
   @ViewChild('editClientModal') editClientModal!: EditClientComponent;

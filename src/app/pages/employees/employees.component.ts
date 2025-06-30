@@ -31,7 +31,7 @@ export class EmployeesComponent implements OnInit {
   ) {}
 
   employees: any[] = [];
-  private readonly urlAPIEmployees = '/api/employees/';
+  private readonly urlAPIEmployees = 'http://localhost:8080/api/employees/';
 
   @ViewChild('employeeModal') employeeModal!: AddEmployeeComponent;
   @ViewChild('editEmployeeModal') editEmployeeModal!: EditEmployeeComponent;
