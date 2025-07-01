@@ -8,6 +8,7 @@ import { EmployeesTableComponent } from '../../items/employees-table/employees-t
 import { AddEmployeeComponent } from '../../items/popups/add-employee/add-employee.component';
 import { CommonModule } from '@angular/common';
 import { EditEmployeeComponent } from '../../items/popups/edit-employee/edit-employee.component';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-employees',
@@ -31,7 +32,7 @@ export class EmployeesComponent implements OnInit {
   ) {}
 
   employees: any[] = [];
-  private readonly urlAPIEmployees = '/api/employees/';
+  private readonly urlAPIEmployees = `http://${environment.host}/api/employees/`;
 
   @ViewChild('employeeModal') employeeModal!: AddEmployeeComponent;
   @ViewChild('editEmployeeModal') editEmployeeModal!: EditEmployeeComponent;

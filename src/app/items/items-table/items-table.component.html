@@ -18,7 +18,7 @@
     <td>{{ row.price | currency:'BRL':'symbol':'1.2-2' }}</td>
     <td>{{ row.profit | currency:'BRL':'symbol':'1.2-2' }}</td>
     <td>{{ row.quantity }}</td>
-    <td><img style="width: 70px; height: 70px;" src="{{ row.photo }}" alt="product image"></td>
+    <td><img style="width: 70px; height: 70px;" src="{{ row.product_image }}" alt="product image"></td>
     <td class="action-buttons">
       <button (click)="editProduct(row)" title="Editar Produto" class="action-btn edit-btn">
         <mat-icon aria-hidden="false" aria-label="Editar" fontIcon="edit-btn"></mat-icon>

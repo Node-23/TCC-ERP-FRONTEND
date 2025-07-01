@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-signin',
@@ -23,7 +24,7 @@ export class SigninComponent {
   confirmPassword: string = '';
 
 
-  private readonly API_REGISTER_URL = 'http://localhost:8080/api/v1/users/register'; //
+  private readonly API_REGISTER_URL = `http://${environment.host}/api/auth/register`;
 
   constructor(
     private router: Router,

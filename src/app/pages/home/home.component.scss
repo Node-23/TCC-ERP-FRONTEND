@@ -1,0 +1,50 @@
+.home-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: #01001F;
+}
+
+.header-buttons {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 40px);
+  font-size: 24px;
+  color: #FFFFFF;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn {
+  background-color: #3498db;
+  color: white;
+  
+  &:hover {
+    background-color: #2980b9;
+  }
+}
+
+.signin-btn {
+  background-color: #2ecc71;
+  color: white;
+  
+  &:hover {
+    background-color: #27ae60;
+  }
+}

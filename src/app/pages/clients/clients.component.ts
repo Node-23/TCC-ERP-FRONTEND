@@ -8,6 +8,7 @@ import { ClientsTableComponent } from '../../items/clients-table/clients-table.c
 import { AddClientComponent } from '../../items/popups/add-client/add-client.component';
 import { CommonModule } from '@angular/common';
 import { EditClientComponent } from '../../items/popups/edit-client/edit-client.component';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-clients',
@@ -31,7 +32,7 @@ export class ClientsComponent implements OnInit {
   ) {}
 
   clients: any[] = [];
-  private readonly urlAPICustomers = '/api/customers/';
+  private readonly urlAPICustomers = `http://${environment.host}/api/customers/`;
 
   @ViewChild('clientModal') clientModal!: AddClientComponent;
   @ViewChild('editClientModal') editClientModal!: EditClientComponent;

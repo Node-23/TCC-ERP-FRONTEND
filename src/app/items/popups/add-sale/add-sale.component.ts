@@ -12,9 +12,10 @@ import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { environment } from '../../../../environments/environment.prod';
 
 interface Product { id: string; name: string; price: number; quantity: number; }
-interface SaleItem { productId: string; quantity: number; productName?: string; price: number; }
+interface SaleItem { product_id: string; quantity: number; price: number; discount?: number; productName?: string; } // Adicionado discount como opcional
 interface Employee { id: string; name: string; }
 interface Client { id: string; name: string; email: string; address: string; phone: string; }
 
@@ -51,22 +52,23 @@ export class AddSaleComponent implements OnInit {
     client: '',
     value: 0,
     paymentMethod: '',
-  // @ts-ignore
     date: new Date(),
-    products: [] as SaleItem[]
+    products: [] as SaleItem[],
+    status: 'PENDING'
   };
 
   outputSale = {
-    clientId: '',
-    employeeId: '',
-    date: '',
-    paymentMethod: '',
-    items: [] as SaleItem[]
+    client_id: '',
+    employee_id: '',
+    date: '',       
+    payment_method: '',
+    items: [] as SaleItem[],
+    status: 'PENDING'
   };
 
   paymentMethods: string[] = ["CRÉDITO", "DÉBITO", "PIX", "DINHEIRO"];
 
-  urlAPISales: string = 'http://localhost:8080/api/sales/';
+  urlAPISales: string = `http://${environment.host}/api/sales/`;
 
   selectedProductId: string | null = null;
   selectedProductQuantity: number = 1;
@@ -107,7 +109,7 @@ export class AddSaleComponent implements OnInit {
     const availableStock = productToAdd.quantity;
     let newQuantityInSale = this.selectedProductQuantity;
 
-    const existingItemIndex = this.sale.products.findIndex(item => item.productId === productToAdd.id);
+    const existingItemIndex = this.sale.products.findIndex(item => item.product_id === productToAdd.id);
 
     if (existingItemIndex > -1) {
       const existingItem = this.sale.products[existingItemIndex];
@@ -127,7 +129,7 @@ export class AddSaleComponent implements OnInit {
       this.sale.products[existingItemIndex].quantity = newQuantityInSale;
     } else {
       this.sale.products.push({
-        productId: productToAdd.id,
+        product_id: productToAdd.id,
         quantity: this.selectedProductQuantity,
         productName: productToAdd.name,
         price: productToAdd.price,
@@ -148,12 +150,16 @@ export class AddSaleComponent implements OnInit {
 
   calculateTotalValue(): void {
     this.sale.value = this.sale.products.reduce((sum, item) => {
-      const product = this.availableProducts.find(p => p.id === item.productId);
+      const product = this.availableProducts.find(p => p.id === item.product_id);
       return sum + (product ? product.price * item.quantity : 0);
     }, 0);
   }
 
   onSubmit() {
+    if (!this.sale.employee || !this.sale.client) { // Adicionada validação de employee e client
+      this.snackBar.open('Selecione o vendedor e o cliente.', 'Fechar', { duration: 3000, panelClass: ['error-snackbar'] });
+      return;
+    }
     if (!this.sale.paymentMethod || this.sale.paymentMethod.trim().length === 0) {
       this.snackBar.open('Informe o método de pagamento.', 'Fechar', { duration: 3000, panelClass: ['error-snackbar'] });
       return;
@@ -164,12 +170,18 @@ export class AddSaleComponent implements OnInit {
       return;
     }
 
-    this.outputSale.employeeId = this.sale.employee;
-    this.outputSale.clientId = this.sale.client;
-    this.outputSale.paymentMethod = this.sale.paymentMethod;
-    // @ts-ignore
-    this.outputSale.date = new Date(this.sale.date).toISOString();
-    this.outputSale.items = this.sale.products;
+    this.outputSale.employee_id = this.sale.employee; // Mapeado para employee_id
+    this.outputSale.client_id = this.sale.client;     // Mapeado para client_id
+    this.outputSale.payment_method = this.sale.paymentMethod; // Mapeado para payment_method
+    this.outputSale.date = new Date(this.sale.date).toISOString(); // Formato ISO 8601
+    // Os itens são mapeados do this.sale.products, garantindo que usem product_id
+    this.outputSale.items = this.sale.products.map(item => ({
+      product_id: item.product_id,
+      quantity: item.quantity,
+      price: item.price,
+      // discount é opcional no backend, então não precisamos enviar se não for definido
+      ...(item.discount !== undefined && { discount: item.discount })
+    }));
 
     this.http.post(this.urlAPISales, this.outputSale, { withCredentials: true }).subscribe({
       next: (response) => {
@@ -185,8 +197,14 @@ export class AddSaleComponent implements OnInit {
       },
       error: (error) => {
         console.error('Erro ao registrar venda:', error);
-        this.snackBar.open('Erro ao registrar venda', 'Fechar', {
-          duration: 1000,
+        let errorMessage = 'Erro ao registrar venda.';
+        if (error.error && error.error.msg) {
+          errorMessage = error.error.msg;
+        } else if (error.error && error.error.error) {
+          errorMessage = error.error.error;
+        }
+        this.snackBar.open(errorMessage, 'Fechar', {
+          duration: 3000,
           panelClass: ['error-snackbar']
         });
       },
@@ -194,24 +212,24 @@ export class AddSaleComponent implements OnInit {
   }
 
   private resetForm(): void {
-
     this.sale = {
       id: '',
       employee: '',
       client: '',
       value: 0,
       paymentMethod: '',
-      // @ts-ignore
+      status: 'PENDING',
       date: new Date(),
       products: [] as SaleItem[]
     };
 
     this.outputSale = {
-      clientId: '',
-      employeeId: '',
+      client_id: '',
+      employee_id: '',
       date: '',
-      paymentMethod: '',
-      items: [] as SaleItem[]
+      payment_method: '',
+      items: [] as SaleItem[],
+      status: 'PENDING'
     };
 
     this.selectedProductId = null;

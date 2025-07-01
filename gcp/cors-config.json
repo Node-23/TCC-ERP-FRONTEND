@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["http://localhost:4200", "http://34.95.123.94"],
+    "method": ["GET", "PUT", "POST", "DELETE"],
+    "responseHeader": ["Content-Type"],
+    "maxAgeSeconds": 3600
+  }
+]

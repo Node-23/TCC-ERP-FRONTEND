@@ -8,6 +8,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../../auth.service';
 import { CommonModule } from '@angular/common';
 import { EditProductComponent } from '../../items/popups/edit-product/edit-product.component';
+import { environment } from '../../../environments/environment.prod';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class ProductsComponent implements OnInit {
   ) {}
 
   products: any[] = [];
-  urlAPIProducts: string = 'http://localhost:8080/api/inventory/products/';
+  urlAPIProducts: string = `http://${environment.host}/api/inventory/products/`;
 
   @ViewChild('productModal') productModal!: AddProductComponent;
   @ViewChild('editProductModal') editProductModal!: EditProductComponent;

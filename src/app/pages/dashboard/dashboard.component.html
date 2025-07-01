@@ -1,1 +1,151 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h2>Dashboard</h2>
+    <app-icon-btn iconName="refresh-icon.svg" buttonText="Atualizar" width="140px" height="40px" (click)="refreshDashboard()"></app-icon-btn>
+  </div>
+
+  <!-- Carregando indicador -->
+  <div class="loading-container" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Carregando dados do dashboard...</p>
+  </div>
+
+  <!-- Erro -->
+  <div class="error-container" *ngIf="hasError">
+    <h3>Não foi possível carregar os dados</h3>
+    <p>Verifique sua conexão e tente novamente</p>
+    <app-icon-btn iconName="refresh-icon.svg" buttonText="Tentar Novamente" width="180px" height="40px" (click)="refreshDashboard()"></app-icon-btn>
+  </div>
+
+  <!-- Conteúdo do Dashboard -->
+  <div class="dashboard-content" *ngIf="!isLoading && !hasError">
+    <!-- KPI Cards -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-icon revenue-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+            <path d="M540-420q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35ZM220-280q-29.7 0-50.85-21.15Q148-322.3 148-352v-256q0-29.7 21.15-50.85Q190.3-680 220-680h108l72-80h160l72 80h108q29.7 0 50.85 21.15Q812-637.7 812-608v256q0 29.7-21.15 50.85Q767.7-280 738-280H220Z"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <h3>Receita Total</h3>
+          <p class="kpi-value">R$ {{ totalRevenue | number:'1.2-2' }}</p>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon clients-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+            <path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm400-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q11-3 28-5.5t28-2.5q66 0 113 47t47 113Z"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <h3>Total de Clientes</h3>
+          <p class="kpi-value">{{ clients.length }}</p>
+          <p class="kpi-trend positive">+{{ newClients }} nos últimos 30 dias</p>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon sales-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+            <path d="M286-100q-53 0-91.5-38.5T156-230v-500h-26q-24 0-42-18t-18-42q0-24 18-42t42-18h172q0-24 18-42t42-18h172q24 0 42 18t18 42h172q24 0 42 18t18 42q0 24-18 42t-42 18h-26v500q0 53-38.5 91.5T610-100H286Zm324-130q9 0 15.5-6.5T632-252v-428h-74v428q0 9 6.5 15.5T610-230Zm-140 0q9 0 15.5-6.5T492-252v-428h-74v428q0 9 6.5 15.5T470-230Zm-140 0q9 0 15.5-6.5T352-252v-428h-74v428q0 9 6.5 15.5T330-230Z"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <h3>Total de Vendas</h3>
+          <p class="kpi-value">{{ sales.length }}</p>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon products-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+            <path d="M200-80q-33 0-56.5-23.5T120-160v-480q0-33 23.5-56.5T200-720h80v-80q0-33 23.5-56.5T360-880h240q33 0 56.5 23.5T680-800v80h80q33 0 56.5 23.5T840-640v480q0 33-23.5 56.5T760-80H200Zm0-80h560v-480H200v480Zm160-560h240v-80H360v80ZM200-160v-480 480Z"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <h3>Produtos em Estoque</h3>
+          <p class="kpi-value">{{ products.length }}</p>
+          <p class="kpi-trend negative" *ngIf="lowStockProducts.length > 0">
+            {{ lowStockProducts.length }} com estoque baixo
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row 1 -->
+    <div class="charts-row">
+      <div class="chart-card large">
+        <div class="chart-container">
+          <canvas id="salesChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card medium">
+        <div class="chart-container">
+          <canvas id="productChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="charts-row">
+      <div class="chart-card medium">
+        <div class="chart-container">
+          <canvas id="clientGrowthChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card medium">
+        <div class="low-stock-container">
+          <h3>Produtos com Estoque Baixo</h3>
+          <div class="low-stock-list" *ngIf="lowStockProducts.length > 0">
+            <div class="low-stock-item" *ngFor="let product of lowStockProducts">
+              <div class="product-info">
+                <strong>{{ product.name }}</strong>
+                <span>Código: {{ product.id }}</span>
+              </div>
+              <div class="stock-info">
+                <div class="stock-bar">
+                  <div class="stock-level" 
+                      [style.width.%]="(product.stock / product.minimumStock * 100) > 100 ? 100 : (product.stock / product.minimumStock * 100)">
+                  </div>
+                </div>
+                <span class="stock-text">{{ product.stock }} / {{ product.minimumStock }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="empty-state" *ngIf="lowStockProducts.length === 0">
+            <p>Todos os produtos estão com níveis adequados de estoque.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Sales -->
+    <div class="recent-activity">
+      <h3>Vendas Recentes</h3>
+      <div class="activity-list">
+        <div class="activity-item" *ngFor="let sale of sales.slice(0, 5)">
+          <div class="activity-icon sale-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+              <path d="M560-440q17 0 28.5-11.5T600-480q0-17-11.5-28.5T560-520q-17 0-28.5 11.5T520-480q0 17 11.5 28.5T560-440ZM280-320h400v-40H280v40Zm0-120h120v-40H280v40ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z"/>
+            </svg>
+          </div>
+          <div class="activity-details">
+            <div class="activity-header">
+              <span class="activity-title">Venda #{{ sale.id }}</span>
+              <span class="activity-date">{{ sale.date | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="activity-body">
+              <span>Cliente: {{ sale.customer?.name || 'Cliente não identificado' }}</span>
+              <span class="activity-amount">R$ {{ sale.total | number:'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="empty-state" *ngIf="sales.length === 0">
+          <p>Não há vendas registradas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

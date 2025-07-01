@@ -6,6 +6,7 @@ import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import {AuthService} from '../../auth.service';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-login',
@@ -22,8 +23,8 @@ import {AuthService} from '../../auth.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  private readonly API_URL = 'http://34.54.133.133/api/auth/login';
-  protected readonly GOOGLE_SSO = "http://34.54.133.133/api/auth/google-login"
+  private readonly API_URL = `http://${environment.host}/api/auth/login`;
+  protected readonly GOOGLE_SSO = `http://${environment.host}/api/auth/google-login`
 
   constructor(
     private router: Router,
@@ -42,8 +43,7 @@ export class LoginComponent {
       this.http.post(this.API_URL, loginData)
         .subscribe({
           next: (response: any) => {
-            this.authService.setToken(response.jwt);
-            // this.authService.setToken(response.access_token);
+            this.authService.setToken(response.access_token);
             this.authService.setOwnerId(response.id);
             this.snackBar.open(`Bem-vindo, ${response.name}!`, 'Fechar', {
               duration: 3000,
@@ -52,7 +52,7 @@ export class LoginComponent {
               panelClass: ['success-snackbar']
             });
 
-            this.router.navigate(['/finances']);
+            this.router.navigate(['/dashboard']);
           },
           error: (error) => {
             console.log(error);

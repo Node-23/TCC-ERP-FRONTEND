@@ -4,7 +4,7 @@
     <h3 style="margin: 0;">Vendas</h3>
     <app-search-bar style="width: 50%"></app-search-bar>
     <app-icon-btn iconName="add-icon.svg" buttonText="Adicionar Venda" width="160px" height="40px" (click)="openPopup()"></app-icon-btn>
-    <app-add-sale #salesModal (saleAdded)="loadSales()"></app-add-sale>
+    <app-add-sale #salesModal (saleAdded)="loadSalesAndRelatedData()"></app-add-sale>
 
     <app-icon-btn iconName="remove-icon.svg" buttonText="Remover Venda" width="160px" height="40px"></app-icon-btn>
     <app-icon-btn iconName="down-arrow-icon.svg" buttonText="Outras ações" width="160px" height="40px"></app-icon-btn>
