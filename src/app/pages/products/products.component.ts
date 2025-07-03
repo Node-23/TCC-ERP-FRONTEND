@@ -45,10 +45,8 @@ export class ProductsComponent implements OnInit {
     this.http.get<any[]>(`${this.urlAPIProducts}`, { withCredentials: true }).subscribe({
       next: (data) => {
         this.products = data;
-        console.log('Produtos carregados:', data);
       },
       error: (err) => {
-        console.error('Erro ao carregar produtos:', err);
         this.snackBar.open('Erro ao carregar produtos', 'Fechar', {
           duration: 2000,
           panelClass: ['error-snackbar']
@@ -80,7 +78,6 @@ export class ProductsComponent implements OnInit {
 
     this.http.post(this.urlAPIProducts, formData).subscribe({
       next: (response) => {
-        console.log('Produto enviado com sucesso:', response);
         this.snackBar.open(`${product.name} cadastrado!`, 'Fechar', {
           duration: 1000,
           horizontalPosition: 'right',
@@ -90,7 +87,6 @@ export class ProductsComponent implements OnInit {
         this.loadProducts();
       },
       error: (error) => {
-        console.log('Erro ao cadastrar produto:', error);
         this.snackBar.open('Erro ao cadastrar produto', 'Fechar', {
           duration: 1000,
           panelClass: ['error-snackbar']
@@ -112,7 +108,6 @@ export class ProductsComponent implements OnInit {
           this.loadProducts();
         },
         error: (error) => {
-          console.error('Erro ao excluir produto:', error);
           this.snackBar.open('Erro ao excluir produto.', 'Fechar', {
             duration: 3000,
             panelClass: ['error-snackbar']
@@ -143,7 +138,6 @@ export class ProductsComponent implements OnInit {
         this.loadProducts();
       },
       error: (error) => {
-        console.error('Erro ao atualizar produto:', error);
         this.snackBar.open('Erro ao atualizar produto.', 'Fechar', {
           duration: 3000,
           panelClass: ['error-snackbar']

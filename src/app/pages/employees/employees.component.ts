@@ -44,10 +44,8 @@ export class EmployeesComponent implements OnInit {
     this.http.get<any[]>(`${this.urlAPIEmployees}`, { withCredentials: true }).subscribe({
       next: (data) => {
         this.employees = data;
-        console.log('Funcionários carregados:', data);
       },
       error: (err) => {
-        console.error('Erro ao carregar funcionários:', err);
         this.snackBar.open('Erro ao carregar funcionários', 'Fechar', {
           duration: 3000,
           panelClass: ['error-snackbar']
@@ -82,7 +80,6 @@ export class EmployeesComponent implements OnInit {
 
     this.http.post(this.urlAPIEmployees, employeePayload).subscribe({
       next: (response: any) => {
-        console.log('Funcionário adicionado com sucesso:', response);
         this.employees.push(response);
         this.snackBar.open(`Funcionário ${response.name} adicionado!`, 'Fechar', {
           duration: 3000,
@@ -93,7 +90,6 @@ export class EmployeesComponent implements OnInit {
         this.loadEmployees();
       },
       error: (error) => {
-        console.error('Erro ao adicionar funcionário:', error);
         this.snackBar.open('Erro ao adicionar funcionário. Verifique os dados e tente novamente.', 'Fechar', {
           duration: 3000,
           panelClass: ['error-snackbar']
@@ -103,7 +99,6 @@ export class EmployeesComponent implements OnInit {
   }
 
   handleDeleteEmployee(employeeId: string): void {
-    // Confirmação com o usuário antes de excluir
     if (confirm('Tem certeza de que deseja excluir este funcionario?')) {
       this.http.delete(`${this.urlAPIEmployees}${employeeId}`, { withCredentials: true }).subscribe({
         next: () => {
@@ -116,7 +111,6 @@ export class EmployeesComponent implements OnInit {
           this.loadEmployees();
         },
         error: (error) => {
-          console.error('Erro ao excluir funcionario:', error);
           this.snackBar.open('Erro ao excluir funcionario.', 'Fechar', {
             duration: 3000,
             panelClass: ['error-snackbar']
@@ -127,7 +121,7 @@ export class EmployeesComponent implements OnInit {
   }
 
   handleEmployeeUpdated(employeeData: any): void {
-    const { id, ...updatePayload } = employeeData; // Separa o ID do restante dos dados
+    const { id, ...updatePayload } = employeeData;
     this.http.put(`${this.urlAPIEmployees}${id}`, updatePayload, { withCredentials: true }).subscribe({
       next: () => {
         this.snackBar.open('Funcionario atualizado com sucesso!', 'Fechar', {
@@ -136,10 +130,9 @@ export class EmployeesComponent implements OnInit {
           verticalPosition: 'top',
           panelClass: ['success-snackbar']
         });
-        this.loadEmployees(); // Recarrega a lista para mostrar os dados atualizados
+        this.loadEmployees();
       },
       error: (error) => {
-        console.error('Erro ao atualizar funcionario:', error);
         this.snackBar.open('Erro ao atualizar funcionario.', 'Fechar', {
           duration: 3000,
           panelClass: ['error-snackbar']

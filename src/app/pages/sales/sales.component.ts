@@ -1,27 +1,32 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {SearchBarComponent} from "../../items/search-bar/search-bar.component";
 import {IconBtnComponent} from '../../items/icon-btn/icon-btn.component';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AddSaleComponent} from '../../items/popups/add-sale/add-sale.component';
 import {SalesTableComponent} from '../../items/sales-table/sales-table.component';
+import { AuthService } from '../../auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sales',
+  standalone: true,
   imports: [
     IconBtnComponent,
     SearchBarComponent,
     AddSaleComponent,
     SalesTableComponent,
+    CommonModule
   ],
   templateUrl: './sales.component.html',
   styleUrl: './sales.component.scss'
 })
 
-export class SalesComponent {
+export class SalesComponent implements OnInit{
   constructor(
     private http: HttpClient,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService
   ) {}
 
   sales: any[] = [];
@@ -37,15 +42,22 @@ export class SalesComponent {
   }
 
   loadSales(): void {
-    this.http.get<any>(`${this.urlAPISales}` + "overview", { withCredentials: true }).subscribe({
-      next: (data: any) => {
+    const token = this.authService.getToken();
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    } else {
+      return;
+    }
+
+    this.http.get<any>(`${this.urlAPISales}overview`, { headers: headers, withCredentials: true }).subscribe({
+      next: (data) => {
         this.clients = data.customers;
         this.employees = data.employees;
         this.sales = data.sales;
         this.products = data.products;
       },
       error: (err) => {
-        console.error('Erro ao carregar dados:', err);
         this.snackBar.open('Erro ao carregar dados de vendas, clientes e funcionários', 'Fechar', {
           duration: 2000,
           panelClass: ['error-snackbar']
@@ -60,7 +72,12 @@ export class SalesComponent {
 
   handleDeleteSale(saleId: string): void {
     if (confirm('Tem certeza de que deseja excluir esta venda?')) {
-      this.http.delete(`${this.urlAPISales}${saleId}`, { withCredentials: true }).subscribe({
+      const token = this.authService.getToken();
+      let headers = new HttpHeaders();
+      if (token) {
+        headers = headers.set('Authorization', `Bearer ${token}`);
+      }
+      this.http.delete(`${this.urlAPISales}${saleId}`, { headers: headers, withCredentials: true }).subscribe({
         next: () => {
           this.snackBar.open('Venda excluída com sucesso!', 'Fechar', {
             duration: 3000,
@@ -71,7 +88,6 @@ export class SalesComponent {
           this.loadSales();
         },
         error: (error) => {
-          console.error('Erro ao excluir venda:', error);
           this.snackBar.open('Erro ao excluir venda.', 'Fechar', {
             duration: 3000,
             panelClass: ['error-snackbar']
@@ -81,4 +97,3 @@ export class SalesComponent {
     }
   }
 }
-

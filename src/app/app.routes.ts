@@ -11,16 +11,14 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SigninComponent } from './pages/signin/signin.component';
-import { AuthGuard } from './auth.guard'; // Importando o AuthGuard
+import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
 
-  // Home e login fora do MainLayout
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signin', component: SigninComponent },
 
-  // Rotas protegidas dentro do MainLayout
   {
     path: '',
     component: MainLayoutComponent,
@@ -36,7 +34,6 @@ export const routes: Routes = [
     ]
   },
 
-  // Wildcard para páginas não encontradas
   { path: '**', redirectTo: '' }
 ];
 

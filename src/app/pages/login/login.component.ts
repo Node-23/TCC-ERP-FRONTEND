@@ -43,7 +43,6 @@ export class LoginComponent {
         .subscribe({
           next: (response: any) => {
             this.authService.setToken(response.jwt);
-            // this.authService.setToken(response.access_token);
             this.authService.setOwnerId(response.id);
             this.snackBar.open(`Bem-vindo, ${response.name}!`, 'Fechar', {
               duration: 3000,
@@ -52,10 +51,9 @@ export class LoginComponent {
               panelClass: ['success-snackbar']
             });
 
-            this.router.navigate(['/finances']);
+            this.router.navigate(['/dashboard']);
           },
           error: (error) => {
-            console.log(error);
             this.snackBar.open('Login falhou. Verifique suas credenciais.', 'Fechar', {
               duration: 3000,
               panelClass: ['error-snackbar']

@@ -33,7 +33,6 @@
   gap: 20px;
 }
 
-// KPI Cards
 .kpi-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -116,7 +115,6 @@
   }
 }
 
-// Charts
 .charts-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
@@ -150,7 +148,6 @@
   }
 }
 
-// Low stock products list
 .low-stock-container {
   display: flex;
   flex-direction: column;
@@ -215,7 +212,6 @@
   }
 }
 
-// Recent Activity
 .recent-activity {
   background-color: white;
   border-radius: 8px;
@@ -291,7 +287,6 @@
   }
 }
 
-// Loading and Error states
 .loading-container, .error-container {
   display: flex;
   flex-direction: column;

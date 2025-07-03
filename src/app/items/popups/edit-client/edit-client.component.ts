@@ -24,14 +24,9 @@ export class EditClientComponent {
     });
   }
 
-  /**
-   * Abre o modal e preenche o formulário com os dados do cliente.
-   * @param client O objeto do cliente a ser editado.
-   */
   open(client: any): void {
     this.isOpen = true;
     this.clientId = client.id;
-    // Preenche o formulário com os dados do cliente
     this.clientForm.patchValue({
       name: client.name,
       email: client.email,
@@ -40,9 +35,6 @@ export class EditClientComponent {
     });
   }
 
-  /**
-   * Fecha o modal e limpa o formulário.
-   */
   close(): void {
     this.isOpen = false;
     this.clientForm.reset();
@@ -51,7 +43,6 @@ export class EditClientComponent {
 
   onSubmit(): void {
     if (this.clientForm.valid && this.clientId) {
-      // Emite um objeto contendo o ID e os dados atualizados do formulário
       this.clientUpdated.emit({ id: this.clientId, ...this.clientForm.value });
       this.close();
     }

@@ -17,8 +17,11 @@
     <td>{{ row.total | currency:'BRL':'symbol':'1.2-2' }}</td>
     <td>{{ row.date | date:'dd/MM/yyyy' }}</td>
     <td class="action-buttons">
-      <button (click)="deleteSale(row.id)" title="Excluir Produto" class="action-btn delete-btn">
+      <button (click)="deleteSale(row.id)" title="Excluir Venda" class="action-btn delete-btn">
         <mat-icon aria-hidden="false" aria-label="Excluir" fontIcon="remove-icon" ></mat-icon>
+      </button>
+      <button (click)="getInvoice(row)" title="Nota Fiscal Venda" class="action-btn">
+        <mat-icon aria-hidden="false" aria-label="Nota Fiscal" fontIcon="receipt" ></mat-icon>
       </button>
     </td>
   </tr>

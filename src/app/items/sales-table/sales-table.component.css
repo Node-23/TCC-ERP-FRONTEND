@@ -61,6 +61,7 @@ table .action-btn img {
 table .action-btn:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
+
 td[colspan="5"] {
   color: #777;
   font-style: italic;

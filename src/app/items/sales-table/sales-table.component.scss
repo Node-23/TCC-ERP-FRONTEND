@@ -69,18 +69,9 @@ table {
       background-color: rgba(0,0,0,0.05);
     }
   }
-
-  .edit-btn:hover {
-    // background-color: #e0f2f1; // Um verde claro para editar
-  }
-
-  .delete-btn:hover {
-    // background-color: #ffebee; // Um vermelho claro para excluir
-  }
 }
 
-// Mensagem para quando não há dados
-td[colspan="5"] { // Certifique-se que o colspan corresponde ao número de colunas
+td[colspan="5"] {
   color: #777;
   font-style: italic;
 }

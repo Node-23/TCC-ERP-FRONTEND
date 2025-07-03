@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "4200:4200"  # Mapeia a porta 80 do container para 4200 no host
+      - "4200:4200"
     environment:
-      - API_URL=http://inventory-api:5000  # URL da API para o frontend
-      - AUTH_API_URL=http://auth-api:5000  # URL da API de autenticação
+      - API_URL=http://inventory-api:5000
+      - AUTH_API_URL=http://auth-api:5000

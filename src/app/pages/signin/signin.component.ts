@@ -64,7 +64,6 @@ export class SigninComponent {
 
     this.http.post(this.API_REGISTER_URL, registrationData).subscribe({
       next: (response) => {
-        console.log('Registro bem-sucedido!', response);
         this.snackBar.open('Registro realizado com sucesso! Faça login.', 'Fechar', {
           duration: 3000,
           horizontalPosition: 'right',
@@ -74,7 +73,6 @@ export class SigninComponent {
         this.router.navigate(['/login']);
       },
       error: (error) => {
-        console.error('Erro no registro:', error);
         const errorMessage = error.error?.message || 'Ocorreu um erro durante o registro.';
         this.snackBar.open(errorMessage, 'Fechar', {
           duration: 3000,

@@ -1,17 +1,16 @@
 import {Component, OnInit, Input, EventEmitter, Output} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgFor, CommonModule } from '@angular/common';
-
-
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import {AuthService} from '../../../auth.service';
 
 interface Product { id: string; name: string; price: number; quantity: number; }
 interface SaleItem { productId: string; quantity: number; productName?: string; price: number; }
@@ -71,7 +70,11 @@ export class AddSaleComponent implements OnInit {
   selectedProductId: string | null = null;
   selectedProductQuantity: number = 1;
 
-  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
+  constructor(
+    private http: HttpClient,
+    private snackBar: MatSnackBar,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
   }
@@ -164,6 +167,14 @@ export class AddSaleComponent implements OnInit {
       return;
     }
 
+    const token = this.authService.getToken();
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    } else {
+      return;
+    }
+
     this.outputSale.employeeId = this.sale.employee;
     this.outputSale.clientId = this.sale.client;
     this.outputSale.paymentMethod = this.sale.paymentMethod;
@@ -171,9 +182,8 @@ export class AddSaleComponent implements OnInit {
     this.outputSale.date = new Date(this.sale.date).toISOString();
     this.outputSale.items = this.sale.products;
 
-    this.http.post(this.urlAPISales, this.outputSale, { withCredentials: true }).subscribe({
+    this.http.post(this.urlAPISales, this.outputSale, {headers: headers, withCredentials: true }).subscribe({
       next: (response) => {
-        console.log('Venda registrada com sucesso:', response);
         this.snackBar.open(`Venda registrada!`, 'Fechar', {
           duration: 1000,
           horizontalPosition: 'right',
@@ -184,7 +194,6 @@ export class AddSaleComponent implements OnInit {
         this.close();
       },
       error: (error) => {
-        console.error('Erro ao registrar venda:', error);
         this.snackBar.open('Erro ao registrar venda', 'Fechar', {
           duration: 1000,
           panelClass: ['error-snackbar']

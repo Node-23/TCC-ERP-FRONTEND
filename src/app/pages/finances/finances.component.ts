@@ -56,7 +56,7 @@ export class FinancesComponent implements OnInit {
     labels: [],
     datasets: [{
       data: [],
-      backgroundColor: [ // Paleta de cores para o gráfico
+      backgroundColor: [
         'rgba(255, 99, 132, 0.8)',
         'rgba(54, 162, 235, 0.8)',
         'rgba(255, 206, 86, 0.8)',
@@ -85,7 +85,6 @@ export class FinancesComponent implements OnInit {
         this.processChartData(data.sales, data.employees);
       },
       error: (err) => {
-        console.error('Erro ao carregar dados financeiros:', err);
         if (err.status !== 401) {
           this.snackBar.open('Erro ao carregar dados financeiros', 'Fechar', { duration: 3000, panelClass: ['error-snackbar'] });
         }

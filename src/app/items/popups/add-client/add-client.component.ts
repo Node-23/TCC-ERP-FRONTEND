@@ -56,7 +56,6 @@ export class AddClientComponent {
       email: '',
       phone: '',
       address: '',
-      // photo: null
     };
     this.selectedFile = null;
   }

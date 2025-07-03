@@ -5,18 +5,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1050; // Para garantir que fique sobre outros elementos
+  z-index: 1050;
 }
 
 .modal {
   background: white;
-  padding: 1.5rem 2rem; // Aumentado o padding para melhor espaçamento
+  padding: 1.5rem 2rem;
   border-radius: 8px;
-  width: 400px; // Aumentado a largura para acomodar melhor os campos
+  width: 400px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
-  gap: 1rem; // Espaçamento entre os elementos do modal
+  gap: 1rem;
 
   h2 {
     margin-top: 0;
@@ -29,7 +29,7 @@
 .form-field {
   display: flex;
   flex-direction: column;
-  width: 100%; // Para os campos ocuparem a largura total do modal
+  width: 100%;
 
   label {
     margin-bottom: 0.5rem;
@@ -42,8 +42,8 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
-    width: 100%; // Para garantir que o input ocupe o espaço
-    box-sizing: border-box; // Para incluir padding e borda na largura total
+    width: 100%;
+    box-sizing: border-box;
 
     &:focus {
       border-color: #007bff;
@@ -52,7 +52,6 @@
     }
   }
 
-  // Estilo para feedback de validação (opcional, mas útil)
   input.ng-invalid.ng-touched {
     border-color: #dc3545;
   }
@@ -62,9 +61,9 @@
   color: white;
   width: 100%;
   border: none;
-  height: 40px; // Aumentada a altura para melhor clique
+  height: 40px;
   border-radius: 8px;
-  min-width: 120px; // Aumentada a largura mínima
+  min-width: 120px;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
@@ -75,16 +74,15 @@
   }
 }
 
-// Específico para botões de adicionar e cancelar para melhor distinção
 button[type="submit"].btn-popup {
-  background-color: #28a745; // Verde para adicionar/confirmar
+  background-color: #28a745;
   &:hover:not(:disabled) {
     background-color: #218838;
   }
 }
 
 button[type="button"].btn-popup {
-  background-color: #dc3545; // Vermelho para cancelar/fechar
+  background-color: #dc3545;
   &:hover:not(:disabled) {
     background-color: #c82333;
   }

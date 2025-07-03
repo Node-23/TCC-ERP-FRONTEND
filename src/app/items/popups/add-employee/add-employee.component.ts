@@ -12,37 +12,32 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     CommonModule
   ],
   templateUrl: './add-employee.component.html',
-  styleUrls: ['./add-employee.component.scss'] // Mantém o SCSS existente
+  styleUrls: ['./add-employee.component.scss']
 })
 export class AddEmployeeComponent {
   isVisible = false;
-  // O evento agora emite apenas o objeto 'employee'
   @Output() employeeAdded = new EventEmitter<{ employee: any }>();
 
   employee = {
     name: '',
     email: '',
     phone: '',
-    address: '', // Novo campo
+    address: '',
     role: '',
-    salary: null as number | null, // Novo campo, inicializado como null
-    hiredate: '', // Novo campo (substitui admissionDate para corresponder à API)
-    status: ''     // Novo campo
+    salary: null as number | null,
+    hiredate: '',
+    status: ''
   };
-
-  // selectedFile não é mais necessário aqui para um payload JSON simples
-  // selectedFile: File | null = null;
 
   constructor(private snackBar: MatSnackBar) {}
 
   open(): void {
     this.isVisible = true;
-    this.resetForm(); // Garante que o formulário esteja limpo ao abrir
+    this.resetForm();
   }
 
   close(): void {
     this.isVisible = false;
-    // Não é necessário chamar resetForm aqui explicitamente se já é chamado no open e no onSubmit bem-sucedido
   }
 
   onSubmit(form: NgForm): void {
@@ -53,10 +48,8 @@ export class AddEmployeeComponent {
       });
       return;
     }
-    // Emite apenas o objeto 'employee'
     this.employeeAdded.emit({ employee: this.employee });
-    this.close(); // Fecha o modal
-    // this.resetForm(); // Opcional: resetar aqui ou garantir que 'open' sempre resete
+    this.close();
   }
 
   private resetForm(): void {
@@ -70,7 +63,5 @@ export class AddEmployeeComponent {
       hiredate: '',
       status: ''
     };
-    // this.selectedFile = null; // Não mais necessário
-    // Se você tiver uma referência ao NgForm, pode usar form.resetForm(this.employee) para resetar para os valores iniciais
   }
 }

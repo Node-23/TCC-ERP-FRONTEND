@@ -18,31 +18,26 @@ Chart.register(...registerables);
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-  // URLs para APIs
   urlAPISales: string = 'http://localhost:8080/api/sales/';
   urlAPICustomers: string = 'http://localhost:8080/api/customers/';
   urlAPIProducts: string = 'http://localhost:8080/api/inventory/products/';
   urlAPIEmployees: string = 'http://localhost:8080/api/employees/';
 
-  // Dados para o dashboard
   sales: any[] = [];
   clients: any[] = [];
   products: any[] = [];
   employees: any[] = [];
 
-  // Dados de análise
   totalRevenue: number = 0;
   monthlySales: any[] = [];
   topProducts: any[] = [];
   newClients: number = 0;
   lowStockProducts: any[] = [];
 
-  // Gráficos
   salesChart: any;
   productDistributionChart: any;
   clientGrowthChart: any;
 
-  // Carregando estados
   isLoading: boolean = true;
   hasError: boolean = false;
 
@@ -55,17 +50,14 @@ export class DashboardComponent implements OnInit {
     this.loadDashboardData();
   }
 
-  // Alternativa para loadDashboardData se não tiver endpoint unificado
   loadDashboardData(): void {
     this.isLoading = true;
 
-    // Promessas para todas as chamadas de API
     const salesPromise = this.http.get<any[]>(`${this.urlAPISales}`, { withCredentials: true }).toPromise();
     const clientsPromise = this.http.get<any[]>(`${this.urlAPICustomers}`, { withCredentials: true }).toPromise();
     const productsPromise = this.http.get<any[]>(`${this.urlAPIProducts}`, { withCredentials: true }).toPromise();
     const employeesPromise = this.http.get<any[]>(`${this.urlAPIEmployees}`, { withCredentials: true }).toPromise();
 
-    // Processar todas as promessas em paralelo
     Promise.all([salesPromise, clientsPromise, productsPromise, employeesPromise])
       .then(([salesData, clientsData, productsData, employeesData]) => {
         this.sales = salesData || [];
@@ -73,14 +65,12 @@ export class DashboardComponent implements OnInit {
         this.products = productsData || [];
         this.employees = employeesData || [];
 
-        // Calcular métricas e inicializar gráficos
         this.calculateMetrics();
         this.initCharts();
 
         this.isLoading = false;
       })
       .catch(error => {
-        console.error('Erro ao carregar dados do dashboard:', error);
         this.snackBar.open('Erro ao carregar dashboard. Verifique sua conexão.', 'Fechar', {
           duration: 3000,
           panelClass: ['error-snackbar']
@@ -91,10 +81,8 @@ export class DashboardComponent implements OnInit {
   }
 
   calculateMetrics(): void {
-    // Calcular receita total
     this.totalRevenue = this.sales.reduce((total, sale) => total + sale.total, 0);
 
-    // Organizar vendas por mês
     const salesByMonth = new Map();
     // @ts-ignore
     const currentYear = new Date().getFullYear();
@@ -111,10 +99,8 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    // Converter para array para o gráfico
     this.monthlySales = Array.from({ length: 12 }, (_, i) => salesByMonth.get(i) || 0);
 
-    // Top produtos (por quantidade vendida)
     const productSales = new Map();
     this.sales.forEach(sale => {
       sale.items.forEach((item: any) => {
@@ -145,19 +131,16 @@ export class DashboardComponent implements OnInit {
       new Date(client.createdAt) >= thirtyDaysAgo
     ).length;
 
-    // Produtos com estoque baixo
     this.lowStockProducts = this.products
       .filter(product => product.stock < product.minimumStock)
       .slice(0, 5);
   }
 
   initCharts(): void {
-    // Limpar gráficos anteriores se existirem
     if (this.salesChart) this.salesChart.destroy();
     if (this.productDistributionChart) this.productDistributionChart.destroy();
     if (this.clientGrowthChart) this.clientGrowthChart.destroy();
 
-    // Gráfico de vendas mensais
     const salesCtx = document.getElementById('salesChart') as HTMLCanvasElement;
     if (salesCtx) {
       this.salesChart = new Chart(salesCtx, {
@@ -187,7 +170,6 @@ export class DashboardComponent implements OnInit {
       });
     }
 
-    // Gráfico de distribuição de produtos
     const topProductNames = this.topProducts.map(p => p.name);
     const topProductQuantities = this.topProducts.map(p => p.quantity);
 
@@ -224,22 +206,18 @@ export class DashboardComponent implements OnInit {
       });
     }
 
-    // Tendência de clientes (últimos 6 meses)
     const clientGrowthCtx = document.getElementById('clientGrowthChart') as HTMLCanvasElement;
     if (clientGrowthCtx) {
-      // Organize clients by month of creation
       const clientsByMonth = new Map();
       // @ts-ignore
       const now = new Date();
 
-      // Initialize data for last 6 months
       for (let i = 5; i >= 0; i--) {
         // @ts-ignore
         const month = new Date(now.getFullYear(), now.getMonth() - i, 1);
         clientsByMonth.set(month.getMonth() + '-' + month.getFullYear(), 0);
       }
 
-      // Count clients by month
       this.clients.forEach(client => {
         // @ts-ignore
         const creationDate = new Date(client.createdAt);
@@ -250,7 +228,6 @@ export class DashboardComponent implements OnInit {
         }
       });
 
-      // Get labels (month names)
       const monthLabels = Array.from(clientsByMonth.keys()).map(key => {
         const [month, year] = key.split('-');
         // @ts-ignore

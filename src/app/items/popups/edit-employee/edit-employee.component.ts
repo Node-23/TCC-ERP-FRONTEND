@@ -21,7 +21,7 @@ export class EditEmployeeComponent {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
       role: ['', Validators.required],
-      address: ['', Validators.required], 
+      address: ['', Validators.required],
       salary: [null, [Validators.required, Validators.min(0)]],
       hiredate: ['', Validators.required],
       status: ['', Validators.required],
@@ -36,10 +36,10 @@ export class EditEmployeeComponent {
       email: employee.email,
       role: employee.role,
       phone: employee.phone,
-      address: employee.address, 
-      salary: employee.salary, 
+      address: employee.address,
+      salary: employee.salary,
       hiredate: employee.hiredate,
-      status: employee.status 
+      status: employee.status
     });
   }
 
@@ -52,8 +52,7 @@ export class EditEmployeeComponent {
   onSubmit(): void {
     if (this.employeeForm.valid && this.employeeId) {
       const formValue = this.employeeForm.value;
-      
-      // Cria um payload apenas com os campos preenchidos
+
       const payload: any = {
         id: this.employeeId,
         name: formValue.name,
