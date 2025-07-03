@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit {
   // URLs para APIs
   urlAPISales: string = `http://${environment.host}/api/sales/`;
   urlAPICustomers: string = `http://${environment.host}/api/customers/`;
-  urlAPIProducts: string = `http://${environment.host}/api/inventory/`;
+  urlAPIProducts: string = `http://${environment.host}/api/inventory/products/`;
   urlAPIEmployees: string = `http://${environment.host}/api/employees/`;
 
   // Dados para o dashboard
