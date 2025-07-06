@@ -23,7 +23,7 @@ export class SigninComponent {
   confirmPassword: string = '';
 
 
-  private readonly API_REGISTER_URL = 'http://localhost:8080/api/v1/users/register'; //
+  private readonly API_REGISTER_URL = 'http://localhost:8080/api/auth/register';
 
   constructor(
     private router: Router,

@@ -12,9 +12,10 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SigninComponent } from './pages/signin/signin.component';
 import { AuthGuard } from './auth.guard';
+import {AuthCallbackComponent} from './auth-callback.component';
 
 export const routes: Routes = [
-
+  { path: 'auth/callback', component: AuthCallbackComponent },
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signin', component: SigninComponent },
